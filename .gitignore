@@ -163,3 +163,4 @@ cython_debug/
 
 include_modules/
 *.log.*
+local_data/
