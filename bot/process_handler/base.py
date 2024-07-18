@@ -11,7 +11,7 @@ logger = get_logger()
 
 
 class Process:
-    def __init__(self, app_command, log_file_path, timeout=60):
+    def __init__(self, app_command, log_file_path, timeout=60 * 5):
         self.app_command = app_command
         slitted_str = log_file_path.split('/')
         self.dir, self.filename = '/'.join(slitted_str[:-1]), slitted_str[-1]
