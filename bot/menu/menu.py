@@ -4,7 +4,7 @@ from pathlib import Path
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 from ..settings import DATA_PATH
-from ..config.logging_config import logger as log
+from ..config import logger as log
 
 
 class MenuKeyError(Exception):
@@ -22,8 +22,8 @@ class Menu:
         except KeyError:
             raise MenuKeyError(f'Item {item} does not appear in the list of functions')
 
-    def get_menu(self, item: str, state: bool | str = None, filters: list[str] = None,
-                 edit_callback: str | list[str] = None, row: int = None,
+    def get_menu(self, item: str, state: bool or str = None, filters: list[str] = None,
+                 edit_callback: str or list[str] = None, row: int = None,
                  kb: dict = None) -> tuple[str, InlineKeyboardMarkup]:
         if item not in self.dict_utils.keys():
             raise MenuKeyError(f'Item {item} does not appear in the list of functions')
@@ -37,7 +37,7 @@ class Menu:
             raise MenuKeyError(f"Item {item} has the wrong structure")
 
     @staticmethod
-    def get_keyboard(keyboard: dict, filters: list[str] = None, edit_callback: str | list[str] = None,
+    def get_keyboard(keyboard: dict, filters: list[str] = None, edit_callback: str or list[str] = None,
                      row_width: int = 2, row: int = None):
         inline_kb = InlineKeyboardMarkup(row_width=row_width)
         row_list = []
