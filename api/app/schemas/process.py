@@ -18,7 +18,8 @@ class ProcessCreate(ProcessBase):
 
 
 class ProcessUpdate(ProcessBase):
-    status: StatusProcess
+    pid: int = None
+    status: StatusProcess = None
 
 
 class ProcessInDBBase(ProcessBase):
