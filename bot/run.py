@@ -7,15 +7,27 @@ if os.path.exists(dotenv_path):
 else:
     load_dotenv(find_dotenv('../local_data/.env.dev'))
 
+import asyncio
+import aioschedule
+
 from aiogram import executor
 from bot.settings import DEBUG
 from bot.app import dp
 
 from bot.callbacks import LIST_CALLBACKS, LIST_HANDLERS
+from bot.loops import LIST_LOOPS
 from bot.utils import get_reg_func
 from bot.config import get_logger
 
 log = get_logger()
+
+
+async def scheduler():
+    for loop in LIST_LOOPS:
+        loop.start()
+    while True:
+        await aioschedule.run_pending()
+        await asyncio.sleep(1)
 
 
 async def on_startup(_):
@@ -43,6 +55,10 @@ async def on_startup(_):
     for callback in LIST_CALLBACKS:
         dp.register_callback_query_handler(callback.callback, callback.custom_filters, state=callback.state)
     log.info('End init callbacks')
+
+    log.info('Start init loops')
+    asyncio.create_task(scheduler())
+    log.info('End init loops')
 
 
 if __name__ == '__main__':
