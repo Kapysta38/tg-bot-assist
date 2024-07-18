@@ -2,9 +2,9 @@ import logging
 from logging.handlers import RotatingFileHandler
 
 
-def get_logger(filename='app.log'):
+def get_logger(filename='logs/app.log'):
     # Создание логгера
-    logger = logging.getLogger(__name__)
+    logger = logging.getLogger()
     logger.setLevel(logging.INFO)
 
     # Формат логирования
