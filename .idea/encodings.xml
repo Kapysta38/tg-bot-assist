@@ -4,6 +4,8 @@
     <file url="file://$PROJECT_DIR$/bot/app.log" charset="windows-1251" />
     <file url="file://$PROJECT_DIR$/bot/logs/app.log" charset="windows-1251" />
     <file url="file://$PROJECT_DIR$/bot/logs/ya-parser-bot.log" charset="windows-1251" />
+    <file url="file://$PROJECT_DIR$/bot/loops/__init__.py" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/bot/loops/base.py" charset="UTF-8" />
     <file url="PROJECT" charset="windows-1251" />
   </component>
 </project>
