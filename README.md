@@ -7,7 +7,7 @@
 1. Клонируйте репозиторий:
     ```sh
     git clone https://github.com/Kapysta38/tg-bot-assist.git
-    cd store_from_Chine
+    cd tg-bot-assist
     ```
 
 2. Установите зависимости:
