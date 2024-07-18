@@ -62,3 +62,16 @@ def update_process(
         raise HTTPException(status_code=404, detail="process not found")
     upd_process = crud.process.update(db=db, db_obj=process, obj_in=process_in)
     return upd_process
+
+
+@router.delete("/{id_process}", response_model=schemas.ProcessInDBBase)
+def delete_process(
+        *,
+        db: Session = Depends(deps.get_db),
+        id_process: int,
+) -> Any:
+    process = crud.role.get(db=db, id=id_process)
+    if not process:
+        raise HTTPException(status_code=404, detail="process not found")
+    upd_role = crud.role.remove(db=db, id=id_process)
+    return upd_role
