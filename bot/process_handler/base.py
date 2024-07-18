@@ -29,7 +29,8 @@ class Process:
     async def _start_process(self):
         self.process = subprocess.Popen(self.app_command, shell=True)
         logger.info(f"App {self.process.pid} started.")
-        await bot.send_message(get_users_in_chat_role(self.api),
+        admin_chat = await get_users_in_chat_role(self.api)
+        await bot.send_message(admin_chat[0],
                                f"<b>Приложение {self.app_command.split()[-1]} запущено</b>",
                                parse_mode="HTML")
         await self._register_process(self.process.pid)
@@ -49,7 +50,8 @@ class Process:
         except subprocess.TimeoutExpired:
             self.process.kill()  # Принудительно завершаем, если не завершился
         logger.info(f"Process {self.process.pid} has been terminated.")
-        await bot.send_message(get_users_in_chat_role(self.api),
+        admin_chat = await get_users_in_chat_role(self.api)
+        await bot.send_message(admin_chat[0],
                                f"<b>Приложение {self.app_command.split()[-1]} отключено</b>",
                                parse_mode="HTML")
 
@@ -75,7 +77,8 @@ class Process:
 
                 if current_log_size == last_log_size and current_rotation_count == last_rotation_count:
                     logger.info(f"App {self.app_command} has stopped logging. Restarting...")
-                    await bot.send_message(get_users_in_chat_role(self.api),
+                    admin_chat = await get_users_in_chat_role(self.api)
+                    await bot.send_message(admin_chat[0],
                                            f"<b>Приложение {self.app_command.split()[-1]} зависло. Перезапуск...</b>",
                                            parse_mode="HTML")
 
@@ -84,7 +87,8 @@ class Process:
                     last_rotation_count = self.__get_rotation_files_count()
 
                     logger.info(f"App {self.app_command} has been restarted.")
-                    await bot.send_message(get_users_in_chat_role(self.api),
+                    admin_chat = await get_users_in_chat_role(self.api)
+                    await bot.send_message(admin_chat[0],
                                            f"<b>Приложение {self.app_command.split()[-1]} перезапущено</b>",
                                            parse_mode="HTML")
                 else:
