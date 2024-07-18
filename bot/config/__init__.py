@@ -1,1 +1,1 @@
-from .logging_config import base_logger as logger
+from .logging_config import get_logger

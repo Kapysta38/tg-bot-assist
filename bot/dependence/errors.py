@@ -10,7 +10,9 @@ from aiogram.types import Message, CallbackQuery
 
 from ..api import APIClient
 from ..utils import get_users_in_chat_role
-from ..config import logger as log
+from ..config import get_logger
+
+log = get_logger()
 
 
 async def send_error(tg_id, ex, tb, title):

@@ -22,4 +22,4 @@ def get_logger(filename='logs/app.log'):
     return logger
 
 
-base_logger = get_logger()
+

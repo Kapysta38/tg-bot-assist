@@ -3,9 +3,11 @@ import time
 import os
 
 from ..api import APIClient
-from ..config import logger
+from ..config import get_logger
 from ..app import bot
 from ..utils import get_users_in_chat_role
+
+logger = get_logger()
 
 
 class Process:

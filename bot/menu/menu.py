@@ -4,7 +4,9 @@ from pathlib import Path
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 from ..settings import DATA_PATH
-from ..config import logger as log
+from ..config import get_logger
+
+log = get_logger()
 
 
 class MenuKeyError(Exception):

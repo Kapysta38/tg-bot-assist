@@ -13,7 +13,9 @@ from bot.app import dp
 
 from bot.callbacks import LIST_CALLBACKS, LIST_HANDLERS
 from bot.utils import get_reg_func
-from bot.config import logger as log
+from bot.config import get_logger
+
+log = get_logger()
 
 
 async def on_startup(_):
