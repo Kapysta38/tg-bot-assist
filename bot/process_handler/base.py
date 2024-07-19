@@ -57,10 +57,10 @@ class Process:
             logger.info(f"Process {self.process.pid} has been terminated.")
         except psutil.NoSuchProcess:
             logger.info(f"Process {self.process.pid} already terminated")
-        admin_chat = await get_users_in_chat_role(self.api)
-        await bot.send_message(admin_chat[0],
-                               f"<b>Приложение {self.app_command.split('/')[-1]} отключено</b>",
-                               parse_mode="HTML")
+        # admin_chat = await get_users_in_chat_role(self.api)
+        # await bot.send_message(admin_chat[0],
+        #                        f"<b>Приложение {self.app_command.split('/')[-1]} отключено</b>",
+        #                        parse_mode="HTML")
 
     def __get_current_log_size(self):
         files = [f for f in os.listdir(self.dir) if f.startswith(self.filename.replace(".log", ''))]
