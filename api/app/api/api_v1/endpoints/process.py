@@ -70,8 +70,8 @@ def delete_process(
         db: Session = Depends(deps.get_db),
         id_process: int,
 ) -> Any:
-    process = crud.role.get(db=db, id=id_process)
+    process = crud.process.get(db=db, id=id_process)
     if not process:
         raise HTTPException(status_code=404, detail="process not found")
-    upd_role = crud.role.remove(db=db, id=id_process)
+    upd_role = crud.process.remove(db=db, id=id_process)
     return upd_role

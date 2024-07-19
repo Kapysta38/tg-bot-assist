@@ -113,4 +113,7 @@ class APIClient:
         return await self._request("PUT", f"/process/{process_id}", data)
 
     async def delete_process(self, process_id: int) -> Dict[str, Any]:
-        return await self._request("DELETE", f"/process/{process_id}")
+        try:
+            return await self._request("DELETE", f"/process/{process_id}")
+        except:
+            return {"detail": "process for delete not found"}

@@ -9,6 +9,7 @@ class ProcessStartLoop(MyBaseLoop):
     def __init__(self, args):
         super().__init__()
         self.args = args
+        self.a = 0
 
     @error(title=title, send_user=False)
     async def run(self):
@@ -16,6 +17,10 @@ class ProcessStartLoop(MyBaseLoop):
         Метод с основной логикой лупа
         :return:
         """
-        process = Process(*self.args)
-        await process.start()
-        await process.monitor()
+        if self.a == 0:
+            process = Process(*self.args)
+            await process.start()
+            self.a += 1
+            await process.monitor()
+
+        #

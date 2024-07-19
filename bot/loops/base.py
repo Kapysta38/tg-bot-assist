@@ -17,4 +17,4 @@ class MyBaseLoop:
         pass
 
     def start(self):
-        aioschedule.every().second.do(self.run)
+        aioschedule.every(1).second.do(self.run)

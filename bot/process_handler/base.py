@@ -1,6 +1,6 @@
-import subprocess
 import time
 import os
+import psutil
 
 from ..api import APIClient
 from ..config import get_logger
@@ -18,8 +18,7 @@ class Process:
         self.prefix = self.filename.replace(".log", "")
         self.timeout = timeout
         self.api = APIClient()
-
-        self.process: subprocess.Popen
+        self.process: psutil.Popen
         self.id: int
 
     async def _register_process(self, pid):
@@ -27,11 +26,11 @@ class Process:
         self.id = process['id']
 
     async def _start_process(self):
-        self.process = subprocess.Popen(self.app_command, shell=True)
+        self.process = psutil.Popen(self.app_command, shell=True)
         logger.info(f"App {self.process.pid} started.")
         admin_chat = await get_users_in_chat_role(self.api)
         await bot.send_message(admin_chat[0],
-                               f"<b>Приложение {self.app_command.split()[-1]} запущено</b>",
+                               f"<b>Приложение {self.app_command.split('/')[-1]} запущено</b>",
                                parse_mode="HTML")
         await self._register_process(self.process.pid)
 
@@ -44,15 +43,23 @@ class Process:
 
     async def _terminate_process(self):
         await self.api.delete_process(self.id)
-        self.process.terminate()
         try:
-            self.process.wait(timeout=10)  # Ждем завершения процесса
-        except subprocess.TimeoutExpired:
-            self.process.kill()  # Принудительно завершаем, если не завершился
-        logger.info(f"Process {self.process.pid} has been terminated.")
+            logger.info(f"Terminating process {self.process.pid}...")
+            for child in self.process.children(recursive=True):
+                logger.info(f"Terminating child process {child.pid}...")
+                child.terminate()
+            self.process.terminate()
+            try:
+                self.process.wait(timeout=5)  # Ждем завершения процесса
+            except psutil.TimeoutExpired:
+                logger.info(f"Killing process {self.process.pid} due to timeout...")
+                self.process.kill()  # Принудительно завершаем, если не завершился
+            logger.info(f"Process {self.process.pid} has been terminated.")
+        except psutil.NoSuchProcess:
+            logger.info(f"Process {self.process.pid} already terminated")
         admin_chat = await get_users_in_chat_role(self.api)
         await bot.send_message(admin_chat[0],
-                               f"<b>Приложение {self.app_command.split()[-1]} отключено</b>",
+                               f"<b>Приложение {self.app_command.split('/')[-1]} отключено</b>",
                                parse_mode="HTML")
 
     def __get_current_log_size(self):
@@ -79,7 +86,7 @@ class Process:
                     logger.info(f"App {self.app_command} has stopped logging. Restarting...")
                     admin_chat = await get_users_in_chat_role(self.api)
                     await bot.send_message(admin_chat[0],
-                                           f"<b>Приложение {self.app_command.split()[-1]} зависло. Перезапуск...</b>",
+                                           f"<b>Приложение {self.app_command.split('/')[-1]} зависло. Перезапуск...</b>",
                                            parse_mode="HTML")
 
                     await self._restart_process()
@@ -89,7 +96,7 @@ class Process:
                     logger.info(f"App {self.app_command} has been restarted.")
                     admin_chat = await get_users_in_chat_role(self.api)
                     await bot.send_message(admin_chat[0],
-                                           f"<b>Приложение {self.app_command.split()[-1]} перезапущено</b>",
+                                           f"<b>Приложение {self.app_command.split('/')[-1]} перезапущено</b>",
                                            parse_mode="HTML")
                 else:
                     last_log_size = current_log_size
